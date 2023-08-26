@@ -1,0 +1,131 @@
+<!--
+      _/_/_/  _/_/_/      _/_/_/                                          _/
+   _/        _/    _/  _/        _/  _/_/  _/    _/  _/_/_/_/    _/_/_/  _/    _/_/    _/    _/
+    _/_/    _/_/_/    _/        _/_/      _/    _/      _/    _/    _/  _/  _/_/_/_/  _/    _/
+       _/  _/        _/        _/        _/    _/    _/      _/    _/  _/  _/        _/    _/
+_/_/_/    _/          _/_/_/  _/          _/_/_/  _/_/_/_/    _/_/_/  _/    _/_/_/    _/_/_/
+                                                                                         _/
+                                                                                    _/_/
+Junio 2021
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="common_header(title)">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title th:replace="${title}"></title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="css/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <link href="css/timeline.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/startmin.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="css/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Toggle Switch -->
+    <link href="css/toggleSwitch.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav th:fragment="common_navigation_menu" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+            <ul class="nav navbar-right navbar-top-links">
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i><span th:text="${session.username}"></span> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesi&oacute;n</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/" class="active"><i class="fa fa-dashboard fa-fw"></i> Panel de control</a>
+                        </li>
+                        <li>
+                            <a href="/formulario-usuario"><i class="fa fa-users fa-fw"></i> Crear usuario</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Dashboard</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Subtítulo
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    Contenido
+                                </div>
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <footer th:fragment="common_footer(scripts)">
+        <!--/* Common scripts */-->
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/metisMenu.min.js"></script>
+        <script src="../js/startmin.js"></script>
+        <!--/* Per-page placeholder for additional scripts */-->
+        <th:block th:replace="${scripts}" />
+    </footer>
+</body>
+</html>

@@ -1,0 +1,25 @@
+1.- Crear proyecto Spring Boot con las siguientes caracteristicas:
+    - Starter web
+    - Starter thymeleaf
+    - Starter test (Se agrega en automatico)
+    - lombok
+    - feign-core
+    - feign-jackson
+
+2.- Replicar el cliente rest con Feign o RestTemplate
+    - Copiar el paquete dto
+    - Copiar el paquete feign
+    - Copiar el archivo properties o bien las propiedades definidas
+        - Cambiar el puerto de ejecucion
+    - Copiar la clase con los tests de nuestro servicio de Feign
+    - Ejecutar un test para validar que el cliente funciona de manera correcta
+
+3.- Mostrar diagrama
+
+4.- Configuraciones previas
+    - Filtro de autorización (AuthorizationFilter)
+    - Configuración del filtro (WebConfig)
+
+5.- Mostrar los controladores
+
+6.- Mostrar los archivos html

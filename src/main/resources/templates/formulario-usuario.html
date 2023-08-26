@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base :: common_header(~{::title})">
+    <title>Formulario de usuario</title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- Navigation -->
+    <nav th:replace="base :: common_navigation_menu"></nav>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--<h1 class="page-header">Configuración de usuario</h1>-->
+                    <h1 class="page-header"><span th:text="${propositoFormulario}"></span></h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <form role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Información del usuario
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <label for="FormUsuarioNombre">Nombre</label>
+                                                <input class="form-control" name="FormUsuarioNombre"
+                                                       id="FormUsuarioNombre" type="text"
+                                                       th:value="${usuario.nombre}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="FormUsuarioEdad">Edad</label>
+                                                <input class="form-control" name="FormUsuarioEdad"
+                                                       id="FormUsuarioEdad" type="text"
+                                                       th:value="${usuario.edad}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="FormTelefonoTipo">Tipo telefono</label>
+                                                <input class="form-control" name="FormTelefonoTipo"
+                                                       id="FormTelefonoTipo" type="text"
+                                                       th:value="${telefono.tipoTelefono}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="FormTelefonoLada">Lada</label>
+                                                <input class="form-control" name="FormTelefonoLada"
+                                                       id="FormTelefonoLada" type="text"
+                                                       th:value="${telefono.lada}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="FormTelefonoNumero">N&uacute;mero</label>
+                                                <input class="form-control" name="FormTelefonoNumero"
+                                                       id="FormTelefonoNumero" type="text"
+                                                       th:value="${telefono.numero}">
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="FormUsuarioId"
+                                                       id="FormUsuarioId" type="hidden"
+                                                       th:value="${usuario.idUsuario}">
+                                            </div>
+                                        </fieldset>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-success alert-dismissible col-lg-8" id="successModalMessage">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <span id="successMessage"></span>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible col-lg-8" id="errorModalMessage">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <span id="errorMessage"></span>
+                        </div>
+                        <!-- /.panel -->
+                        <button type="button" name="guardarUsuario" id="guardarUsuario" class="btn btn-primary btn-lg btn-block">Guardar</button>
+                        <br/>&nbsp;
+                    </form>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+<footer th:replace="base :: common_footer(~{::script})">
+    <script type="text/javascript">
+            $(document).ready(function() {
+                $("#errorModalMessage").hide();
+                $("#successModalMessage").hide();
+
+                //if submit button is clicked
+                $('#guardarUsuario').click(function() {
+                    $("#errorModalMessage").hide();
+                    $("#successModalMessage").hide();
+
+                    //Get the data from all the fields
+                    var FormUsuarioId = $('input[name=FormUsuarioId]').val();
+                    var FormUsuarioNombre = $('input[name=FormUsuarioNombre]').val();
+                    var FormUsuarioEdad = $('input[name=FormUsuarioEdad]').val();
+                    var FormTelefonoTipo = $('input[name=FormTelefonoTipo]').val();
+                    var FormTelefonoLada = $('input[name=FormTelefonoLada]').val();
+                    var FormTelefonoNumero = $('input[name=FormTelefonoNumero]').val();
+
+                    $.ajax({
+                        type: "POST",
+                        data: {"FormUsuarioId": FormUsuarioId, "FormUsuarioNombre": FormUsuarioNombre, "FormUsuarioEdad": FormUsuarioEdad,
+                                "FormTelefonoTipo": FormTelefonoTipo, "FormTelefonoLada": FormTelefonoLada, "FormTelefonoNumero": FormTelefonoNumero},
+                        url: "/guardar-usuario",
+                        success: function(){
+                            $("#successMessage").text("Usuario guardado correctamente.");
+                            $("#successModalMessage").show();
+                            console.log("Usuario creado con exito");
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            if(XMLHttpRequest.responseJSON.messages != null) {
+                                $("#errorMessage").text("ERROR en los siguientes campos: " + XMLHttpRequest.responseJSON.messages);
+                            } else {
+                                $("#errorMessage").text("Ocurrio un error al GUARDAR el usuario, consulte al Administrador.");
+                            }
+                            $("#errorModalMessage").show();
+                            console.log("Error");
+                        }
+                    });
+                 });
+            });
+    </script>
+</footer>
+</body>
+</html>
