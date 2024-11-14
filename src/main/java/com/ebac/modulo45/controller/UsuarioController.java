@@ -78,6 +78,7 @@ public class UsuarioController {
         log.info("Guardando información de Walmart para usuario {}", request.getParameter("GPSServerUser"));
         HttpStatus statusCode = HttpStatus.OK;
         Response response = null;
+        ErrorResponse errorResponse = new ErrorResponse();
 
         try {
             String usuarioId = request.getParameter("FormUsuarioId");
@@ -89,6 +90,31 @@ public class UsuarioController {
 
             // Validar informacion recibida
             // ...
+            if(usuarioNombre.length() == 0 || usuarioEdad.length() == 0 || telefonoTipo.length() == 0 || telefonoLada.length() == 0 || telefonoNumero.length() == 0) {
+
+                errorResponse.addMessage("Existen campos vacíos, se requieren llenar");
+                response = errorResponse;
+
+                statusCode = HttpStatus.BAD_REQUEST;
+
+                throw new MiExcepcion("Existen campos vacíos, se requieren llenar");
+            } else if (!telefonoTipo.equals("Casa") && !telefonoTipo.equals("Oficina")) {
+
+                errorResponse.addMessage("El tipo de teléfono no es vállido");
+                response = errorResponse;
+
+                statusCode = HttpStatus.BAD_REQUEST;
+
+                throw new MiExcepcion("El tipo de teléfono no es válido");
+            } else if (!(telefonoNumero.length() == 10)) {
+                errorResponse.addMessage("El número de teléfono es demasiado grande o muy pequeño");
+                response = errorResponse;
+
+                statusCode = HttpStatus.BAD_REQUEST;
+
+                throw new MiExcepcion("El número de teléfono es demasiado grande o muy pequeño");
+            }
+
 
             // Si el usuarioId tiene informacion se trata de una actualizacion por lo tanto seteamos el id recibido
             Usuario.UsuarioBuilder usuarioBuilder = Usuario.builder();
@@ -114,7 +140,7 @@ public class UsuarioController {
 
             ResponseWrapper<Usuario> user = feignUserService.createUser(usuario);
             if (!user.isSuccess()) {
-                ErrorResponse errorResponse = new ErrorResponse();
+                //ErrorResponse errorResponse = new ErrorResponse();
                 errorResponse.addMessage(user.getMessage());
                 response = errorResponse;
 
@@ -125,5 +151,11 @@ public class UsuarioController {
         }
 
         return new ResponseEntity<>(response, statusCode);
+    }
+}
+
+class MiExcepcion extends Exception {
+    public MiExcepcion(String mensaje) {
+        super(mensaje);
     }
 }

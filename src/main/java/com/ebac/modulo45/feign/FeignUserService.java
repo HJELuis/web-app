@@ -1,5 +1,6 @@
 package com.ebac.modulo45.feign;
 
+import com.ebac.modulo45.dto.InfoUsuario;
 import com.ebac.modulo45.dto.ResponseWrapper;
 import com.ebac.modulo45.dto.Usuario;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,12 @@ public class FeignUserService {
     @Autowired
     public FeignUserService(FeignApiClient FeignApiClient) {
         this.feignApiClient = FeignApiClient;
+    }
+
+
+    public ResponseWrapper<InfoUsuario> getInfoUsuario() {
+        log.info("Obteniendo la información del usuario");
+        return feignApiClient.getInfoUsuario();
     }
 
     public ResponseWrapper<List<Usuario>> getUsers() {

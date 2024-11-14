@@ -1,5 +1,6 @@
 package com.ebac.modulo45.feign;
 
+import com.ebac.modulo45.dto.InfoUsuario;
 import com.ebac.modulo45.dto.ResponseWrapper;
 import com.ebac.modulo45.dto.Usuario;
 import feign.Headers;
@@ -28,4 +29,10 @@ public interface FeignApiClient {
 
     @RequestLine("DELETE /usuarios/{id}")
     void deleteUser(@Param("id") int id);
+
+    /*
+    Sección para obtener informacion de la tabla INFO_USUARIO
+     */
+    @RequestLine("GET /info_usuario")
+    ResponseWrapper<InfoUsuario> getInfoUsuario();
 }

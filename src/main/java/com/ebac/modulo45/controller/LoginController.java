@@ -1,8 +1,11 @@
 package com.ebac.modulo45.controller;
 
+import com.ebac.modulo45.dto.InfoUsuario;
+import com.ebac.modulo45.feign.FeignUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +18,9 @@ import java.io.IOException;
 @RestController
 public class LoginController {
 
+    @Autowired
+    FeignUserService feignApiClient;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
@@ -24,10 +30,15 @@ public class LoginController {
         String password = request.getParameter("password");
 
         // Actividad sugerida, validar el usuario y el password contra una tabla en la DB
-        if (username.equals("salvador") && password.equals("123")) {
+        InfoUsuario  infoUsuario = feignApiClient.getInfoUsuario().getResponseEntity().getBody();
+        if (username.equals(infoUsuario.getNombreUsuario()) && password.equals(infoUsuario.getContrasena())) {
             request.getSession().setAttribute("username", username);
             response.sendRedirect("/");
         }
+//        if (username.equals("salvador") && password.equals("123")) {
+//            request.getSession().setAttribute("username", username);
+//            response.sendRedirect("/");
+//        }
 
         return modelAndView;
     }
