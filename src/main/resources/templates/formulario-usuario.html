@@ -40,24 +40,30 @@
                                                        id="FormUsuarioEdad" type="text"
                                                        th:value="${usuario.edad}">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="FormTelefonoTipo">Tipo telefono</label>
-                                                <input class="form-control" name="FormTelefonoTipo"
-                                                       id="FormTelefonoTipo" type="text"
-                                                       th:value="${telefono.tipoTelefono}">
+
+                                            <div th:each="telefono, iterStat : ${telefonos}">
+                                                <div class="form-group">
+                                                    <label th:for="'FormTelefonoTipo' + ${iterStat.index}">Tipo teléfono [[${iterStat.index + 1}]]</label>
+                                                    <input class="form-control" th:name="|telefonos[${iterStat.index}].tipoTelefono|"
+                                                           th:id="'FormTelefonoTipo' + ${iterStat.index}"
+                                                           type="text" th:value="${telefono.tipoTelefono}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:for="'FormTelefonoLada' + ${iterStat.index}">Lada [[${iterStat.index + 1}]]</label>
+                                                    <input class="form-control" th:name="|telefonos[${iterStat.index}].lada|"
+                                                           th:id="'FormTelefonoLada' + ${iterStat.index}"
+                                                           type="text" th:value="${telefono.lada}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:for="'FormTelefonoNumero' + ${iterStat.index}">Número [[${iterStat.index + 1}]]</label>
+                                                    <input class="form-control" th:name="|telefonos[${iterStat.index}].numero|"
+                                                           th:id="'FormTelefonoNumero' + ${iterStat.index}"
+                                                           type="text" th:value="${telefono.numero}">
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="FormTelefonoLada">Lada</label>
-                                                <input class="form-control" name="FormTelefonoLada"
-                                                       id="FormTelefonoLada" type="text"
-                                                       th:value="${telefono.lada}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="FormTelefonoNumero">N&uacute;mero</label>
-                                                <input class="form-control" name="FormTelefonoNumero"
-                                                       id="FormTelefonoNumero" type="text"
-                                                       th:value="${telefono.numero}">
-                                            </div>
+
                                             <div class="form-group">
                                                 <input name="FormUsuarioId"
                                                        id="FormUsuarioId" type="hidden"

@@ -48,6 +48,7 @@ public class UsuarioController {
     @RequestMapping(value = "/formulario-usuario", method = RequestMethod.GET)
     public Object formularioUsuario(HttpServletRequest request, HttpServletResponse response, Model model) {
         String idUsuario = request.getParameter("idUsuario");
+        boolean actualizacion = false;
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("formulario-usuario");
 
@@ -61,15 +62,19 @@ public class UsuarioController {
                 usuario = usuarioResponse.getResponseEntity().getBody();
                 // Solo extraemos el primer telefono (En caso de tener)
                 // Actividad sugerida: Generar funcionalidad para retornar todos los telefonos en caso de tener mas de 1 y generar el formulario correspondiente
+                List<Telefono> telefonos = new ArrayList<>();
+
                 if (usuario.getTelefonos().size() > 0) {
-                    telefono = usuario.getTelefonos().get(0);
+                    telefonos = usuario.getTelefonos();
+                    actualizacion = true;
                 }
+                model.addAttribute("telefonos", telefonos);
                 model.addAttribute("propositoFormulario", "Actualizar usuario");
             }
         }
 
         model.addAttribute("usuario", usuario);
-        model.addAttribute("telefono", telefono);
+        if(!actualizacion) model.addAttribute("telefono", telefono);
         return modelAndView;
     }
 
