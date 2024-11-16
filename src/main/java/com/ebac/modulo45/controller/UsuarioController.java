@@ -84,63 +84,94 @@ public class UsuarioController {
         HttpStatus statusCode = HttpStatus.OK;
         Response response = null;
         ErrorResponse errorResponse = new ErrorResponse();
+        ResponseWrapper<Usuario> responseUsuario = new ResponseWrapper<>();
+        Usuario auxUsuario = new Usuario();
 
         try {
             String usuarioId = request.getParameter("FormUsuarioId");
             String usuarioNombre = request.getParameter("FormUsuarioNombre");
             String usuarioEdad = request.getParameter("FormUsuarioEdad");
-            String telefonoTipo = request.getParameter("FormTelefonoTipo");
-            String telefonoLada = request.getParameter("FormTelefonoLada");
-            String telefonoNumero = request.getParameter("FormTelefonoNumero");
 
-            // Validar informacion recibida
-            // ...
-            if(usuarioNombre.length() == 0 || usuarioEdad.length() == 0 || telefonoTipo.length() == 0 || telefonoLada.length() == 0 || telefonoNumero.length() == 0) {
 
-                errorResponse.addMessage("Existen campos vacíos, se requieren llenar");
-                response = errorResponse;
 
-                statusCode = HttpStatus.BAD_REQUEST;
-
-                throw new MiExcepcion("Existen campos vacíos, se requieren llenar");
-            } else if (!telefonoTipo.equals("Casa") && !telefonoTipo.equals("Oficina")) {
-
-                errorResponse.addMessage("El tipo de teléfono no es vállido");
-                response = errorResponse;
-
-                statusCode = HttpStatus.BAD_REQUEST;
-
-                throw new MiExcepcion("El tipo de teléfono no es válido");
-            } else if (!(telefonoNumero.length() == 10)) {
-                errorResponse.addMessage("El número de teléfono es demasiado grande o muy pequeño");
-                response = errorResponse;
-
-                statusCode = HttpStatus.BAD_REQUEST;
-
-                throw new MiExcepcion("El número de teléfono es demasiado grande o muy pequeño");
-            }
 
 
             // Si el usuarioId tiene informacion se trata de una actualizacion por lo tanto seteamos el id recibido
             Usuario.UsuarioBuilder usuarioBuilder = Usuario.builder();
             if (!usuarioId.equals("0")) {
                 usuarioBuilder = usuarioBuilder.idUsuario(Integer.parseInt(usuarioId));
+                responseUsuario = feignUserService.getUserById(Integer.parseInt(usuarioId));
+                auxUsuario = responseUsuario.getResponseEntity().getBody();
             }
 
             // En caso de haber agregado la funcionalidad para editar mas de 1 telefono, esta seccion se debera adecuar
             // para recibir todos los telefonos y realizar el guardado/actualizacion
 
-            //Generamos el telefono recibido
-            Telefono telefono = Telefono.builder()
-                    .tipoTelefono(telefonoTipo)
-                    .lada(Integer.parseInt(telefonoLada))
-                    .numero(telefonoNumero)
-                    .build();
+            int index = 0;
+            List<Telefono> telefonos = new ArrayList<>();
+
+
+            while (true) {
+                String tipoTelefono = request.getParameter("telefonos[" + index + "].tipoTelefono");
+                String lada = request.getParameter("telefonos[" + index + "].lada");
+                String numero = request.getParameter("telefonos[" + index + "].numero");
+
+                if (tipoTelefono == null || lada == null || numero == null) {
+                    break;
+                }
+
+                // Validar informacion recibida
+                // ...
+                if(usuarioNombre.length() == 0 || usuarioEdad.length() == 0 || tipoTelefono.length() == 0 || lada.length() == 0 || numero.length() == 0) {
+
+                    errorResponse.addMessage("Existen campos vacíos, se requieren llenar");
+                    response = errorResponse;
+
+                    statusCode = HttpStatus.BAD_REQUEST;
+
+                    throw new MiExcepcion("Existen campos vacíos, se requieren llenar");
+                } else if (!tipoTelefono.equals("Casa") && !tipoTelefono.equals("casa") && !tipoTelefono.equals("Oficina") && !tipoTelefono.equals("oficina") ) {
+
+                    errorResponse.addMessage("El tipo de teléfono no es vállido");
+                    response = errorResponse;
+
+                    statusCode = HttpStatus.BAD_REQUEST;
+
+                    throw new MiExcepcion("El tipo de teléfono no es válido");
+                } else if (!(numero.length() == 10)) {
+                    errorResponse.addMessage("El número de teléfono es demasiado grande o muy pequeño");
+                    response = errorResponse;
+
+                    statusCode = HttpStatus.BAD_REQUEST;
+
+                    throw new MiExcepcion("El número de teléfono es demasiado grande o muy pequeño");
+                }
+
+                Telefono auxTelefono = auxUsuario.getTelefonos().get(index);
+                int idTelefono = auxTelefono.getIdTelefono();
+
+                //Generamos el telefono recibido
+                Telefono telefono = Telefono.builder()
+                        .idTelefono(idTelefono)
+                        .tipoTelefono(tipoTelefono)
+                        .lada(Integer.parseInt(lada))
+                        .numero(numero)
+                        .build();
+                telefonos.add(telefono);
+
+                index++;
+            }
+
+
+
+
+
+
             //Generamos el usuario
             Usuario usuario = usuarioBuilder
                     .nombre(usuarioNombre)
                     .edad(Integer.parseInt(usuarioEdad))
-                    .telefonos(List.of(telefono))
+                    .telefonos(telefonos)
                     .build();
 
             ResponseWrapper<Usuario> user = feignUserService.createUser(usuario);

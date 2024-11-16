@@ -109,18 +109,34 @@
                     $("#errorModalMessage").hide();
                     $("#successModalMessage").hide();
 
-                    //Get the data from all the fields
+                   // Obtener los datos del usuario
                     var FormUsuarioId = $('input[name=FormUsuarioId]').val();
                     var FormUsuarioNombre = $('input[name=FormUsuarioNombre]').val();
                     var FormUsuarioEdad = $('input[name=FormUsuarioEdad]').val();
-                    var FormTelefonoTipo = $('input[name=FormTelefonoTipo]').val();
-                    var FormTelefonoLada = $('input[name=FormTelefonoLada]').val();
-                    var FormTelefonoNumero = $('input[name=FormTelefonoNumero]').val();
+
+                    var datos = {
+                        FormUsuarioId: FormUsuarioId,
+                        FormUsuarioNombre: FormUsuarioNombre,
+                        FormUsuarioEdad: FormUsuarioEdad
+                    };
+
+                    // Recopilar los datos de los teléfonos
+                    $('input[name^="telefonos["][name$=".tipoTelefono"]').each(function(index) {
+                        var tipoTelefono = $(this).val();
+                        var ladaTelefono = $(`input[name="telefonos[${index}].lada"]`).val();
+                        var numeroTelefono = $(`input[name="telefonos[${index}].numero"]`).val();
+
+                        // Agregar los datos al objeto
+                        datos[`telefonos[${index}].tipoTelefono`] = tipoTelefono;
+                        datos[`telefonos[${index}].lada`] = ladaTelefono;
+                        datos[`telefonos[${index}].numero`] = numeroTelefono;
+                    });
+
+
 
                     $.ajax({
                         type: "POST",
-                        data: {"FormUsuarioId": FormUsuarioId, "FormUsuarioNombre": FormUsuarioNombre, "FormUsuarioEdad": FormUsuarioEdad,
-                                "FormTelefonoTipo": FormTelefonoTipo, "FormTelefonoLada": FormTelefonoLada, "FormTelefonoNumero": FormTelefonoNumero},
+                        data: datos,
                         url: "/guardar-usuario",
                         success: function(){
                             $("#successMessage").text("Usuario guardado correctamente.");
