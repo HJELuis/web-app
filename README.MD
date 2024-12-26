@@ -2,15 +2,20 @@
 
 This project uses: [H2 Database](https://www.h2database.com/html/main.html) 
 
-## Where to go
+## To execute
 
-You need to access to `localhost:8080/h2-console` to manipulate the database content
+You need first to execute a REST service in [REST](https://github.com/HJELuis/rest-service)
 
-You access to control panes on `localhost:8181`
+Then you can access to `localhost:8080/h2-console` to manipulate the database content
 
 ## Before execution
 
-You've already created a database with name `modulo 65` and tables info_usuario, usuario, telefono.
+You've already created a database with name `modulo 65` and `tables info_usuario`, `usuario`, `telefono`.
+
+You can add the data of your preference following the structure in the next examples
+
+After the previous steps then you can execute this app and see the results on `localhost:8181`.
 
 ## Examples of execution
+
 
