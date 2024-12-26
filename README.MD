@@ -12,6 +12,8 @@ Then you can access to `localhost:8080/h2-console` to manipulate the database co
 
 You've already created a database with name `modulo 65` and tables `info_usuario`, `usuario`, `telefono`
 
+https://github.com/HJELuis/web-app/blob/master/h2_info_usuario.PNG
+
 You can add the data of your preference following the structure in the next examples
 
 After the previous steps then you can execute this app and see the results on `localhost:8181`
