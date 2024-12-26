@@ -10,7 +10,7 @@ Then you can access to `localhost:8080/h2-console` to manipulate the database co
 
 ## Before execution
 
-You've already created a database with name `modulo 65` and `tables info_usuario`, `usuario`, `telefono`.
+You've already created a database with name `modulo 65` and tables `info_usuario`, `usuario`, `telefono`.
 
 You can add the data of your preference following the structure in the next examples
 
